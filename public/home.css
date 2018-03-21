@@ -1,0 +1,15 @@
+body {
+    text-align: center;
+}
+
+.vertical-center {
+    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+
+.submit-btn {
+    margin: auto;
+    margin-top: 10px;
+}
