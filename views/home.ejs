@@ -10,13 +10,23 @@
     <body>
         <div class="vertical-center">
             <div class="container">
-                <h1>Welcome!</h1>
-                <h4>Enter parameters and submit to begin.</h4>
-                <form method="post">
-                    <input name="hashtag" placeholder="hashtag">
-                    <input name="count" placeholder="100">
-                    <button type="submit" class="submit-btn d-block btn btn-primary">Submit</button>
-                </form>
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title">Welcome!</h1>
+                        <h4>Enter parameters and submit to begin.</h4>
+                        <form method="post">
+                            <div class="d-block">
+                                <label class="hashtag">Hashtag:</label>
+                                <input name="hashtag" placeholder="boilerup">
+                            </div>
+                            <div class="d-block">
+                                <label>Number of images:</label>                    
+                                <input name="count" placeholder="100">
+                            </div>
+                            <button type="submit" class="submit-btn d-block btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

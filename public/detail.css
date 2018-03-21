@@ -11,6 +11,10 @@ img {
     margin: 0;
 }
 
+img:hover, .stats:hover{
+    filter:  brightness(80%)
+}
+
 .vertical-center {
     min-height: 100%;
     min-height: 100vh;

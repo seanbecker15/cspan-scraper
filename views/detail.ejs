@@ -11,7 +11,7 @@
         <div class="vertical-center">
             <div class="container img-container">
                 <h6>Hashtag: <%=hashtag%></h6>
-                <h6>Count: <%=count%></h6>
+                <h6>Number of images: <%=count%></h6>
                 <div class="flex">
                     <% nodes.forEach(node => { %>
                         <img id="<%=node.id%>_img" src="<%=node.thumbnail_src%>" class="mr-auto" onclick="showStats(this.id)">

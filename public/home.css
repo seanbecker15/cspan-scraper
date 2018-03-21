@@ -13,3 +13,12 @@ body {
     margin: auto;
     margin-top: 10px;
 }
+
+.card {
+    max-width: 600px;
+    margin: auto;
+}
+
+.hashtag {
+    margin-right: 71px;
+}
