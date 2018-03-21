@@ -14,9 +14,33 @@
                 <h6>Count: <%=count%></h6>
                 <div class="flex">
                     <% nodes.forEach(node => { %>
-                        <img src="<%=node.thumbnail_src%>" class="mr-auto">
+                        <img id="<%=node.id%>_img" src="<%=node.thumbnail_src%>" class="mr-auto" onclick="showStats(this.id)">
+                        <div class="card stats" id="<%=node.id%>_stats" onclick="showImg(this.id)">
+                            <div class="card-body">
+                                <%if(node.edge_media_to_caption.edges[0]) { %> 
+                                    <div class="card-text">Caption: <%=node.edge_media_to_caption.edges[0].node.text%></div>
+                                <% } %>
+                                <div class="card-text">Likes: <%=node.edge_liked_by.count%></div>
+                                <div class="card-text">Comments: <%=node.edge_media_to_comment.count%></div>                        
+                                <div class="card-text">Time: <%=node.taken_at_timestamp%></div>  
+                            </div>
+                        </div>                                   
                     <% }) %>
                 </div>
+                <script>
+                    function showStats(id) {
+                        let img_str = id
+                        let stats_str = id.slice(0,id.length-4) + "_stats";
+                        document.getElementById(img_str).style.display = "none";
+                        document.getElementById(stats_str).style.display = "inline-flex";                        
+                    }
+                    function showImg(id) {
+                        let stats_str = id
+                        let img_str = id.slice(0,id.length-6) + "_img";
+                        document.getElementById(img_str).style.display = "inline-flex";
+                        document.getElementById(stats_str).style.display = "none";                        
+                    }
+                </script>
             </div>
         </div>
     </body>

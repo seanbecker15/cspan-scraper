@@ -1,4 +1,4 @@
-## Node.js/express website built for Dr. Sorin Matei in order to research mass communication at at Purdue University.
+## Node.js/express website built for Dr. Sorin Matei at Purdue University to help research mass media communications.
 ### Author: Sean Becker
 
 #### Features:

@@ -3,8 +3,12 @@ body {
 }
 
 img {
+    display: inline-flex;
+    cursor: pointer;
     width: 250px;
     height: 250px;
+    padding: 5px;
+    margin: 0;
 }
 
 .vertical-center {
@@ -16,4 +20,14 @@ img {
 
 .img-container {
     max-width: 800px;
+}
+
+.stats {
+    display: none;
+    cursor: pointer;
+    width: 250px;
+    height: 250px;
+    overflow: scroll;
+    padding: 5px;
+    margin: 0;
 }
