@@ -4,8 +4,9 @@ const bodyParser    = require('body-parser');
 const session       = require('express-session');
 const flash         = require('express-flash');
 const http          = require('http');
-const engines       = require('consolidate');''
-const express       = require('express')
+const engines       = require('consolidate');
+const express       = require('express');
+
 const app = express()
 
 app.use(logger('dev'));
@@ -26,4 +27,5 @@ app.get('/', (req, res) => res.render('home'));
 app.post('/', scraper.retrieve)
 
 const server = http.createServer(app);
-server.listen(3000)
+const port = process.env.PORT || 3000;
+server.listen(port)
