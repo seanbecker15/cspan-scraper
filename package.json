@@ -4,6 +4,7 @@
   "description": "Enter a hashtag and get metadata about media with the the given tag",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "dev": "nodemon app.js",
     "prod": "node app.js"
   },
