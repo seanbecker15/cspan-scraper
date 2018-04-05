@@ -22,7 +22,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 const scraper = require('./server/controllers/scraper');
-
 app.get('/', (req, res) => res.render('home'));
 app.post('/', scraper.retrieve)
 

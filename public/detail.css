@@ -35,3 +35,7 @@ img:hover, .stats:hover{
     padding: 5px;
     margin: 0;
 }
+
+.btn {
+    margin-bottom: 10px;
+}

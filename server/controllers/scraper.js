@@ -1,16 +1,23 @@
-const request   = require('request')
+const request    = require('request');
+const csv_parser = require('json2csv').Parser;
+const moment     = require('moment');
 var hashtag;
 var count;
 var nodes;
+var simplified_json;
 var url;
 var i;
+var button_type;
+
 module.exports.retrieve = async (req, res) => {
     i = 0;
     hashtag   = req.body.hashtag;
     count     = req.body.count;
     nodes     = [];
+    simplified_json = [];
     i         = 0;
     url       = "https://www.instagram.com/explore/tags/" + hashtag + "/?__a=1";
+    button_type = req.body.button;
 
     // http://instagr.am/p/{shortcode}/?__a=1
     // use hashtag to get json
@@ -25,15 +32,34 @@ function makeRequest(url, res) {
         const obj = JSON.parse(json);
         const edges = obj.graphql.hashtag.edge_hashtag_to_media.edges
         var num_nodes = 0;
-        console.log(edges)
         edges.forEach( edge => {
             if(i++ < count) {
-                nodes.push(edge.node);
+              nodes.push(edge.node);
+              // create json object for each node
+              var caption = ""
+              if(edge.node.edge_media_to_caption.edges[0]) {
+                caption = edge.node.edge_media_to_caption.edges[0].node.text
+              }
+              let time = moment(1000* edge.node.taken_at_timestamp).format('MMMM Do YYYY, h:mm a')
+              let simplified_json_obj = {
+                "caption": caption,
+                "likes": edge.node.edge_liked_by.count,
+                "comments": edge.node.edge_media_to_comment.count,
+                "time": time
+              }
+              simplified_json.push(simplified_json_obj)
             }
-            console.log(num_nodes++);
         });
         if(i >= count) {
-            return res.render('detail', { hashtag, count, nodes})
+            if(button_type == "view") {
+              return res.render('detail', { hashtag, count, nodes})
+            } else {
+              const fields = ['caption', 'likes', 'comments', 'time']
+              const parser = new csv_parser({ fields })
+              const csv    = parser.parse(simplified_json)
+              res.attachment('instagram_data_' + hashtag + '.csv');
+              return res.status(200).send(csv);
+            }
         }
 
         const has_next_page = obj.graphql.hashtag.edge_hashtag_to_media.page_info.has_next_page;
@@ -45,10 +71,26 @@ function makeRequest(url, res) {
             console.log("has_next_page: " + has_next_page)
             return makeRequest(url, res)
         } else {
+          if(button_type == "view") {
             return res.render('detail', { hashtag, count, nodes})
+          } else {
+            const fields = ['caption', 'likes', 'comments', 'time']
+            const parser = new csv_parser({ fields })
+            const csv    = parser.parse(simplified_json)
+            res.attachment('instagram_data_' + hashtag + '.csv');
+            return res.status(200).send(csv);
+          }
         }
     })
 }
+/*
+<%  if(node.edge_media_to_caption.edges[0]) { %> 
+      <div class="card-text">Caption: <%=node.edge_media_to_caption.edges[0].node.text%></div>
+    <% } %>
+    <div class="card-text">Likes: <%=node.edge_liked_by.count%></div>
+    <div class="card-text">Comments: <%=node.edge_media_to_comment.count%></div>                        
+    <div class="card-text">Time: <%=node.taken_at_timestamp%></div>
+/*
 /*
     print("timestamp: " + str(data["entry_data"]["PostPage"][0]["graphql"]["shortcode_media"]["taken_at_timestamp"]))
     print("caption: " + str(data["entry_data"]["PostPage"][0]["graphql"]["shortcode_media"]["edge_media_to_caption"]["edges"][0]["node"]["text"]))
