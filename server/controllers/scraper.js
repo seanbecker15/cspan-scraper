@@ -3,6 +3,7 @@ const csv_parser = require('json2csv').Parser;
 const moment     = require('moment');
 var hashtag;
 var count;
+var actualCount;
 var nodes;
 var simplified_json;
 var url;
@@ -12,11 +13,12 @@ var button_type;
 module.exports.retrieve = async (req, res) => {
     i = 0;
     hashtag = req.body.hashtag;
-    count = req.body.count;
+    count = parseInt(req.body.count);
+    actualCount = 0;
     if (!hashtag) {
       hashtag = 'boilerup';
     }
-    if (!count || !Number.isInteger(count)) {
+    if (!count || count === NaN) {
       count = 100;
     }
     nodes     = [];
@@ -36,25 +38,29 @@ module.exports.retrieve = async (req, res) => {
 function makeRequest(url, res) {
     request.get(url, null, (err, response, json) => {
         const obj = JSON.parse(json);
+        if (!obj.graphql) {
+          return res.render('detail', { hashtag, count: actualCount, nodes})
+        }
         const edges = obj.graphql.hashtag.edge_hashtag_to_media.edges
         var num_nodes = 0;
         edges.forEach( edge => {
-            if(i++ < count) {
-              nodes.push(edge.node);
-              // create json object for each node
-              var caption = ""
-              if(edge.node.edge_media_to_caption.edges[0]) {
-                caption = edge.node.edge_media_to_caption.edges[0].node.text
-              }
-              let time = moment(1000* edge.node.taken_at_timestamp).format('MMMM Do YYYY, h:mm a')
-              let simplified_json_obj = {
-                "caption": caption,
-                "likes": edge.node.edge_liked_by.count,
-                "comments": edge.node.edge_media_to_comment.count,
-                "time": time
-              }
-              simplified_json.push(simplified_json_obj)
+          actualCount++;
+          if(i++ < count) {
+            nodes.push(edge.node);
+            // create json object for each node
+            var caption = ""
+            if(edge.node.edge_media_to_caption.edges[0]) {
+              caption = edge.node.edge_media_to_caption.edges[0].node.text
             }
+            let time = moment(1000* edge.node.taken_at_timestamp).format('MMMM Do YYYY, h:mm a')
+            let simplified_json_obj = {
+              "caption": caption,
+              "likes": edge.node.edge_liked_by.count,
+              "comments": edge.node.edge_media_to_comment.count,
+              "time": time
+            }
+            simplified_json.push(simplified_json_obj)
+          }
         });
         if(i >= count) {
             if(button_type == "view") {
