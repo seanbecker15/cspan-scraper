@@ -11,8 +11,14 @@ var button_type;
 
 module.exports.retrieve = async (req, res) => {
     i = 0;
-    hashtag   = req.body.hashtag;
-    count     = req.body.count;
+    hashtag = req.body.hashtag;
+    count = req.body.count;
+    if (!hashtag) {
+      hashtag = 'boilerup';
+    }
+    if (!count || !Number.isInteger(count)) {
+      count = 100;
+    }
     nodes     = [];
     simplified_json = [];
     i         = 0;

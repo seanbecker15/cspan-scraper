@@ -10,11 +10,12 @@
     <body>
         <div class="vertical-center">
             <div class="container img-container">
+                <div style="height: 20px"></div>
                 <h6>Hashtag: <%=hashtag%></h6>
                 <h6>Number of images: <%=count%></h6>
                 <div class="flex">
                     <% nodes.forEach(node => { %>
-                        <img id="<%=node.id%>_img" src="<%=node.thumbnail_src%>" class="mr-auto" onclick="showStats(this.id)">
+                        <img id="<%=node.id%>_img" src="<%=node.thumbnail_src%>" class="card mr-auto" onclick="showStats(this.id)">
                         <div class="card stats" id="<%=node.id%>_stats" onclick="showImg(this.id)">
                             <div class="card-body">
                                 <%if(node.edge_media_to_caption.edges[0]) { %> 

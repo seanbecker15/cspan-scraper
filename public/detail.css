@@ -3,7 +3,6 @@ body {
 }
 
 img {
-    display: inline-flex;
     cursor: pointer;
     width: 250px;
     height: 250px;
@@ -26,14 +25,17 @@ img:hover, .stats:hover{
     max-width: 800px;
 }
 
-.stats {
-    display: none;
+.card {
+    display: inline-flex;
     cursor: pointer;
     width: 250px;
     height: 250px;
-    overflow: scroll;
     padding: 5px;
     margin: 0;
+}
+.stats {
+    display: none;
+    overflow: scroll;
 }
 
 .btn {
