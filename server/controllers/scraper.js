@@ -16,10 +16,17 @@ module.exports.retrieve = async (req, res) => {
     count = parseInt(req.body.count);
     actualCount = 0;
     if (!hashtag) {
-      hashtag = 'boilerup';
+      req.flash('error', 'You must provide a hashtag');
+      res.redirect('/');
+      return;
     }
     if (!count || count === NaN) {
-      count = 100;
+      req.flash('error', 'You must provide a count');
+      res.redirect('/');
+      return;
+    }
+    if (hashtag.indexOf('#') == 0) {
+      hashtag = hashtag.substring(1, hashtag.length);
     }
     nodes     = [];
     simplified_json = [];
